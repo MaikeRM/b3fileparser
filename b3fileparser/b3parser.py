@@ -27,7 +27,8 @@ def read_b3_file(file_name):
         file,
         widths=size_fields,
         header=None,
-        names=columns
+        names=columns,
+        encoding='latin1'
     )[1:-1]
 
     for col in columns:
@@ -44,8 +45,9 @@ def read_b3_file(file_name):
             b3_data[col] = b3_data[col].apply(
                 lambda x: b3_meta_data.MARKETS[x])
         if col == "INDICADOR_DE_CORRECAO_DE_PRECOS":
-            b3_data[col] = b3_data[col].apply(lambda x: b3_meta_data.INDOPC[x])
+            b3_data[col] = b3_data[col].apply(lambda x: b3_meta_data.INDOPC.get(x, "sem_registro"))
         if col == "CODIGO_BDI":
-            b3_data[col] = b3_data[col].apply(lambda x: b3_meta_data.CODBDI[x])
+            b3_data[col] = b3_data[col].apply(lambda x: b3_meta_data.CODBDI.get(x, "sem_registro"))
+
 
     return b3_data
